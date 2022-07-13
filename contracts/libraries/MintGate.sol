@@ -9,20 +9,25 @@ error NeedToSendMoreETH();
 error QuantityWouldExceedMaxSupply();
 error MintHasNotStarted();
 error MintHasEnded();
-error MintClosed();
 error PartialRefundFailed();
 
 library MintGate {
 
-    function allowed(address buyer, bytes32[] calldata proof, bytes32 root) internal pure {
+    function allowed(address buyer, bytes32[] memory proof, bytes32 root) internal pure {
+        if (root == 0) {
+            return;
+        }
+
         if (proof.length == 0 || !MerkleProof.verify(proof, root, keccak256(abi.encodePacked(buyer)))) {
             revert AddressNotAllowed();
         }
     }
 
-    function open(bool value) internal pure {
-        if (!value) {
-            revert MintClosed();
+    function maxMint(uint256 max, uint256 minted, uint256 quantity) internal pure {
+        unchecked {
+            if (max > 0 && (minted + quantity) > max) {
+                revert CannotMintMoreThan({ amount: max });
+            }
         }
     }
 
@@ -62,12 +67,7 @@ library MintGate {
     }
 
     function supply(uint256 available, uint256 max, uint256 minted, uint256 quantity) internal pure {
+        maxMint(max, minted, quantity);
         supply(available, quantity);
-
-        unchecked {
-            if (max > 0 && (minted + quantity) > max) {
-                revert CannotMintMoreThan({ amount: max });
-            }
-        }
     }
 }

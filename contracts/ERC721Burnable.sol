@@ -8,4 +8,12 @@ abstract contract ERC721Burnable is ERC721 {
     function burn(uint256 tokenId) public virtual {
         _burn(tokenId, true);
     }
+
+    function totalBurned() external view returns (uint256) {
+        return _totalBurned();
+    }
+
+    function totalBurnedBy(address account) external view returns (uint256) {
+        return _numberBurned(account);
+    }
 }

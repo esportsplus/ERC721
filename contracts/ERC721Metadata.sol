@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import {ERC721Ownable} from "./ERC721Ownable.sol";
+import {ERC721} from "./ERC721.sol";
 
 error QueryForNonexistentToken(string method);
 
-abstract contract ERC721Metadata is ERC721Ownable {
+abstract contract ERC721Metadata is ERC721 {
 
 
     string internal _uri;
@@ -14,7 +14,7 @@ abstract contract ERC721Metadata is ERC721Ownable {
     mapping(uint256 => string) private _tokenURI;
 
 
-    function _baseURI() internal override view virtual returns (string memory) {
+    function _baseURI() internal override(ERC721) view virtual returns (string memory) {
         return _uri;
     }
 
@@ -30,7 +30,7 @@ abstract contract ERC721Metadata is ERC721Ownable {
         _tokenURI[tokenId] = uri;
     }
 
-    function tokenURI(uint256 tokenId) override public view virtual returns(string memory) {
+    function tokenURI(uint256 tokenId) override(ERC721) public view virtual returns(string memory) {
         if (!_exists(tokenId)) {
             revert QueryForNonexistentToken({ method: 'tokenURI' });
         }

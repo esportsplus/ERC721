@@ -2,10 +2,9 @@
 pragma solidity ^0.8.15;
 
 import {ERC2981} from "./ERC2981/ERC2981.sol";
-import {ERC721A} from "./ERC721.sol";
-import {ERC721Ownable} from "./ERC721Ownable.sol";
+import {ERC721} from "./ERC721.sol";
 
-abstract contract ERC721Royalty is ERC721Ownable, ERC2981 {
+abstract contract ERC721Royalty is ERC721, ERC2981 {
 
     constructor(address receiver, uint64 fee) ERC2981(receiver, fee) {}
 
@@ -18,7 +17,7 @@ abstract contract ERC721Royalty is ERC721Ownable, ERC2981 {
         _setRoyaltyInfo(tokenId, receiver, fee);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721A, ERC2981) returns (bool) {
-        return super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC2981) returns (bool) {
+        return ERC2981.supportsInterface(interfaceId);
     }
 }
