@@ -53,6 +53,10 @@ abstract contract ERC721Configurable is ERC721, ERC721Burnable, ERC721Metadata, 
     }
 
 
+    function _availableSupply() internal view virtual returns (uint256) {
+        return _maxSupply - _totalMinted();
+    }
+
     function _baseURI() internal override(ERC721, ERC721Metadata) view virtual returns (string memory) {
         return ERC721Metadata._baseURI();
     }
@@ -98,7 +102,7 @@ abstract contract ERC721Configurable is ERC721, ERC721Burnable, ERC721Metadata, 
         MintGate.open(config.endsAt, config.startsAt);
         MintGate.price(buyer, config.price, quantity, msg.value);
 
-        uint256 available = _maxSupply - _totalMinted();
+        uint256 available = _availableSupply();
         uint16[4] memory aux = _unpackAux(_getAux(buyer));
 
         // `SaleConfig` max supply is not allowed to exceed max collection supply
