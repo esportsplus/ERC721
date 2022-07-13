@@ -87,7 +87,7 @@ abstract contract ERC721Configurable is ERC721, ERC721Burnable, ERC721Metadata, 
     }
 
     function mint(uint256 key, bytes32[] memory proof, uint16 quantity) payable public whenNotPaused {
-        address buyer = _msgSenderERC721A();
+        address buyer = _msgSender();
         SaleConfig memory config = _config[key];
 
         // Collection gate
