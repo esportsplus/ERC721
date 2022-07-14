@@ -37,7 +37,7 @@
     "lint:js": "eslint --ignore-path .gitignore . --fix",
     "lint:sol": "prettier --write \"contracts/**/*.sol\""
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/esportsplus/ERC721.git"
