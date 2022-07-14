@@ -14,13 +14,23 @@ error PartialRefundFailed();
 library MintGate {
 
     function allowed(address buyer, bytes32[] memory proof, bytes32 root) internal pure {
-        if (root == 0) {
-            return;
-        }
-
-        if (proof.length == 0 || !MerkleProof.verify(proof, root, keccak256(abi.encodePacked(buyer)))) {
+        if (!isAllowed(buyer, proof, root)) {
             revert AddressNotAllowed();
         }
+    }
+
+    function isAllowed(address buyer, bytes32[] memory proof, bytes32 root) internal pure returns (bool) {
+        // Doesn't use an allowlist
+        if (root == 0) {
+            return true;
+        }
+
+        // Proof was not provided or merkle verify failed
+        if (proof.length == 0 || !MerkleProof.verify(proof, root, keccak256(abi.encodePacked(buyer)))) {
+            return false;
+        }
+
+        return true;
     }
 
     function maxMint(uint256 max, uint256 minted, uint256 quantity) internal pure {

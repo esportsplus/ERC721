@@ -82,6 +82,10 @@ abstract contract ERC721Configurable is ERC721, ERC721Burnable, ERC721Metadata, 
         delete _config[key];
     }
 
+    function isAllowed(uint256 key, bytes32[] memory proof) external view returns (bool) {
+        return MintGate.isAllowed(_msgSender(), proof, _allowlists[key]);
+    }
+
     function mint(uint256 key, uint16 quantity) payable public whenNotPaused {
         mint(key, new bytes32[](0), quantity);
     }
